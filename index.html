@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeagueComps.gg - Ultimate Matchup Tool</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Fonts (Google Fonts - Roboto & Rajdhani for tech feel) -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Main CSS (for custom animations/scrollbars) -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Configure Tailwind Theme Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'rajdhani': ['Rajdhani', 'sans-serif'],
+                        'roboto': ['Roboto', 'sans-serif'],
+                    },
+                    colors: {
+                        'lol-gold': '#C8AA6E',
+                        'lol-blue': '#0AC8B9',
+                        'lol-dark': '#010A13',
+                        'lol-dark-2': '#091428',
+                        'lol-hextech': '#CDFAFA',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-lol-dark text-slate-100 font-roboto overflow-hidden h-screen w-screen">
+
+    <!-- Background Image with Overlay -->
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <img src="images/hub_hero_bg.jpg" alt="Background" class="w-full h-full object-cover opacity-30">
+        <!-- Gradient Overlay to darken the image for text readability -->
+        <div class="absolute inset-0 bg-gradient-to-t from-lol-dark via-lol-dark/90 to-lol-dark/40"></div>
+        <!-- Hextech Pattern Overlay (optional CSS effect) -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMTAsIDIwMCwgMTg1LCAwLjEpIi8+PC9zdmc+')] opacity-20"></div>
+    </div>
+
+    <div class="relative z-10 flex h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-20 lg:w-72 bg-lol-dark-2/90 backdrop-blur-md border-r border-slate-800 flex flex-col items-center lg:items-start py-6 transition-all duration-300 shadow-2xl z-50">
+            <!-- Logo Area -->
+            <div class="px-0 lg:px-6 mb-12 flex justify-center lg:justify-start w-full">
+                <img src="images/side_top_logo.svg" alt="LeagueComps" class="h-10 lg:h-12 w-auto drop-shadow-[0_0_10px_rgba(200,170,110,0.5)]">
+            </div>
+
+            <!-- Nav Links -->
+            <nav class="flex-1 w-full flex flex-col gap-2 px-2 lg:px-4">
+                <!-- Tab 1: Matchups -->
+                <button class="nav-btn group active flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-slate-800/50 border border-transparent hover:border-lol-gold/30 w-full" data-target="matchup-section">
+                    <div class="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-lg border border-slate-700 group-hover:border-lol-gold group-hover:shadow-[0_0_15px_rgba(200,170,110,0.3)] transition-all">
+                        <img src="images/matchup_tool_tab.svg" alt="Matchups" class="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="hidden lg:flex flex-col items-start">
+                        <span class="font-rajdhani font-bold text-lg tracking-wide text-slate-200 group-hover:text-lol-gold uppercase">Matchup Tool</span>
+                        <span class="text-xs text-slate-500">Find your counters</span>
+                    </div>
+                </button>
+                
+                <!-- Tab 2: Runes -->
+                <button class="nav-btn group flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-slate-800/50 border border-transparent hover:border-lol-blue/30 w-full" data-target="runes-section">
+                    <div class="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-lg border border-slate-700 group-hover:border-lol-blue group-hover:shadow-[0_0_15px_rgba(10,200,185,0.3)] transition-all">
+                        <img src="images/rune_build_tab.svg" alt="Runes" class="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="hidden lg:flex flex-col items-start">
+                        <span class="font-rajdhani font-bold text-lg tracking-wide text-slate-200 group-hover:text-lol-blue uppercase">Rune Forge</span>
+                        <span class="text-xs text-slate-500">Optimize your build</span>
+                    </div>
+                </button>
+
+                <!-- Tab 3: Meta -->
+                <button class="nav-btn group flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-slate-800/50 border border-transparent hover:border-purple-400/30 w-full" data-target="meta-section">
+                    <div class="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-lg border border-slate-700 group-hover:border-purple-400 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all">
+                        <img src="images/meta_information_tab.svg" alt="Meta" class="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="hidden lg:flex flex-col items-start">
+                        <span class="font-rajdhani font-bold text-lg tracking-wide text-slate-200 group-hover:text-purple-400 uppercase">Meta & Patch</span>
+                        <span class="text-xs text-slate-500">Tier lists & nerfs</span>
+                    </div>
+                </button>
+            </nav>
+            
+            <!-- Footer/Credit -->
+            <div class="mt-auto px-6 hidden lg:block">
+                <div class="text-xs text-slate-600 font-rajdhani border-t border-slate-800 pt-4">
+                    v1.0.4 <br> Data updated: Patch 14.22
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 h-full overflow-hidden relative">
+            <div class="h-full overflow-y-auto custom-scrollbar p-4 lg:p-10 pb-24">
+                
+                <!-- Feature 1: Matchup Tool (Default Active) -->
+                <section id="matchup-section" class="content-section block animate-fade-in min-h-full">
+                    <header class="mb-8 border-b border-slate-800 pb-6">
+                        <h1 class="text-4xl lg:text-6xl font-rajdhani font-bold text-transparent bg-clip-text bg-gradient-to-r from-lol-gold to-amber-200 uppercase drop-shadow-sm">Lane Matchups</h1>
+                        <p class="text-slate-400 mt-2 text-lg font-light">Select your lane role and the enemy champion to analyze counter strategies.</p>
+                    </header>
+
+                    <!-- Step 1: Lane Selection -->
+                    <div class="mb-10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-1 h-8 bg-lol-gold"></div>
+                            <h3 class="text-xl font-bold text-lol-gold uppercase tracking-wider">1. Choose Your Lane</h3>
+                        </div>
+                        
+                        <div class="flex gap-3 flex-wrap" id="lane-selector">
+                            <!-- JS will inject lane buttons here -->
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Champion Selection & Results -->
+                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+                        <!-- Search & Grid -->
+                        <div class="xl:col-span-5 bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-md shadow-xl h-fit">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-1 h-6 bg-lol-blue"></div>
+                                <h3 class="text-lg font-bold text-lol-blue uppercase tracking-wider">2. Select Enemy Champion</h3>
+                            </div>
+                            
+                            <div class="relative mb-4">
+                                <input type="text" id="champion-search" placeholder="Search champion..." class="w-full bg-slate-950 border border-slate-700 text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-lol-blue focus:ring-1 focus:ring-lol-blue transition-all font-rajdhani text-lg placeholder-slate-600">
+                                <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+
+                            <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-[450px] overflow-y-auto custom-scrollbar pr-2" id="champion-grid">
+                                <!-- Champions injected here via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Results View -->
+                        <div class="xl:col-span-7">
+                            <div id="matchup-result" class="hidden h-full">
+                                <!-- Dynamic Result Content via JS -->
+                            </div>
+                            
+                            <!-- Placeholder State -->
+                            <div id="matchup-placeholder" class="h-full min-h-[400px] flex flex-col items-center justify-center text-slate-500 bg-slate-900/20 rounded-2xl border-2 border-dashed border-slate-800/50 animate-pulse">
+                                <div class="w-20 h-20 rounded-full bg-slate-800/50 flex items-center justify-center mb-4">
+                                    <img src="images/lol_logo.png" class="w-12 opacity-20 grayscale" alt="Logo">
+                                </div>
+                                <span class="text-2xl font-rajdhani font-bold text-slate-600">Awaiting Input</span>
+                                <span class="text-sm mt-2">Select a lane and champion to begin analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Feature 2: Rune Builds -->
+                <section id="runes-section" class="content-section hidden animate-fade-in min-h-full">
+                    <header class="mb-8 border-b border-slate-800 pb-6">
+                        <h1 class="text-4xl lg:text-6xl font-rajdhani font-bold text-transparent bg-clip-text bg-gradient-to-r from-lol-blue to-cyan-200 uppercase">Rune Forge</h1>
+                        <p class="text-slate-400 mt-2 text-lg">Curated rune paths used by Challenger players.</p>
+                    </header>
+                    
+                    <div class="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-6 lg:p-10 min-h-[600px] relative backdrop-blur-sm">
+                         <!-- Search for Runes -->
+                         <div class="max-w-xl mx-auto mb-12 relative z-10">
+                            <div class="relative group">
+                                <div class="absolute -inset-1 bg-gradient-to-r from-lol-blue to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                                <input type="text" id="rune-search" placeholder="Search champion for runes..." class="relative w-full bg-slate-900 border border-slate-600 text-white rounded-lg px-6 py-4 focus:outline-none focus:border-lol-blue focus:ring-1 focus:ring-lol-blue transition-all font-rajdhani text-xl text-center placeholder-slate-600">
+                            </div>
+                         </div>
+
+                         <div id="rune-display-area" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                             <!-- Rune Cards Injected Here -->
+                         </div>
+                    </div>
+                </section>
+
+                <!-- Feature 3: Meta & Patch -->
+                <section id="meta-section" class="content-section hidden animate-fade-in min-h-full">
+                    <div class="grid grid-cols-1 2xl:grid-cols-2 gap-8 h-full">
+                        
+                        <!-- Top 5 Meta List -->
+                        <div class="flex flex-col h-full bg-slate-900/40 p-6 rounded-2xl border border-slate-700/30 backdrop-blur-sm">
+                            <header class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <div>
+                                    <h1 class="text-3xl font-rajdhani font-bold text-white uppercase flex items-center gap-2">
+                                        <span class="text-purple-400">S+</span> Meta Tier List
+                                    </h1>
+                                    <p class="text-sm text-slate-400">Highest winrate champions by lane</p>
+                                </div>
+                                <div class="flex bg-slate-950 rounded-lg p-1 border border-slate-800" id="meta-lane-filters">
+                                    <!-- Filters injected via JS -->
+                                </div>
+                            </header>
+                            
+                            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2" id="meta-list">
+                                <!-- Meta items -->
+                            </div>
+                        </div>
+
+                        <!-- Patch Notes -->
+                        <div class="flex flex-col h-full bg-slate-900/40 p-6 rounded-2xl border border-slate-700/30 backdrop-blur-sm">
+                             <header class="mb-6">
+                                <h1 class="text-3xl font-rajdhani font-bold text-white uppercase flex items-center gap-3">
+                                    <span class="w-1.5 h-8 bg-red-500 block shadow-[0_0_10px_red]"></span>
+                                    Latest Patch Notes
+                                </h1>
+                                <p class="text-sm text-slate-400 ml-4 mt-1">Official changes & balance updates</p>
+                            </header>
+                            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-4" id="patch-notes">
+                                 <!-- Patch items -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Note: data.js uses export, so main script must be type="module" -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>

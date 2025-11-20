@@ -1,0 +1,98 @@
+/* --- LEAGUECOMPS.GG - MAIN STYLESHEET --- */
+
+/* * Custom Scrollbar
+ * Gives the app a sleek, integrated look compared to default browser bars.
+ */
+
+/* Webkit (Chrome, Edge, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px; /* For horizontal scrollbars */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(1, 10, 19, 0.4); /* Very dark blue/black transparent */
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #1e293b; /* Slate-800 */
+    border-radius: 3px;
+    border: 1px solid rgba(200, 170, 110, 0.1); /* Subtle gold border */
+    transition: background 0.2s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #C8AA6E; /* LoL Gold on hover */
+}
+
+/* Firefox */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #1e293b rgba(1, 10, 19, 0.4);
+}
+
+/* * Animations 
+ * Used for page transitions and loading elements.
+ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-slide-in {
+    animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* * Utility Classes
+ * Custom effects that are tricky to do with just Tailwind utility classes.
+ */
+
+/* Hextech Glow - Useful for active states or borders */
+.glow-gold {
+    box-shadow: 0 0 15px rgba(200, 170, 110, 0.2);
+}
+
+.glow-blue {
+    box-shadow: 0 0 15px rgba(10, 200, 185, 0.2);
+}
+
+/* Tooltip Styles (Dynamically toggled via JS) */
+.tooltip-container {
+    position: relative;
+}
+
+/* Custom range input styling for any potential sliders */
+input[type=range] {
+    -webkit-appearance: none; 
+    background: transparent; 
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+    outline: none; 
+}
