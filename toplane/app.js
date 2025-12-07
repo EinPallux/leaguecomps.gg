@@ -4,50 +4,46 @@ const toplanerSearch = document.getElementById('toplanerSearch');
 const resultsSection = document.getElementById('resultsSection');
 const selectedToplanerSpan = document.getElementById('selectedToplaner');
 const tierContainer = document.getElementById('tierContainer');
-const sourcesBtn = document.getElementById('sourcesBtn');
-const sourcesModal = document.getElementById('sourcesModal');
-const modalClose = document.getElementById('modalClose');
-const changelogBtn = document.getElementById('changelogBtn');
-const changelogModal = document.getElementById('changelogModal');
-const changelogModalClose = document.getElementById('changelogModalClose');
+const strategyText = document.getElementById('strategyText');
 
 // State
 let currentSelectedToplaner = null;
 
-// Initialize the application
+// Initialize
 function init() {
     renderToplanerGrid();
     setupEventListeners();
 }
 
-// Render Enemy Toplaner Champion Grid
+// Render Grid
 function renderToplanerGrid() {
     toplanerGrid.innerHTML = '';
     
-    toplaneData.toplaners.forEach(toplaner => {
+    // Sort alphabetically for better UX
+    const sortedToplaners = [...toplaneData.toplaners].sort((a, b) => a.name.localeCompare(b.name));
+
+    sortedToplaners.forEach(toplaner => {
         const card = document.createElement('div');
-        card.className = 'champion-card';
+        // New Tailwind Classes for Grid Items
+        card.className = 'group flex flex-col items-center p-3 bg-white/5 border border-white/10 rounded-xl cursor-pointer hover:bg-white/10 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-900/20 transition-all duration-200';
         card.dataset.name = toplaner.name.toLowerCase();
-        card.title = toplaner.name; // Add title for hover
-        
-        card.innerHTML = `
-            <div class="champion-icon"><img src="${toplaner.icon}" alt="${toplaner.name}"></div>
-            <div class="champion-name">${toplaner.name}</div>
-        `;
-        
-        // Add keyboard accessibility
         card.setAttribute('role', 'button');
         card.setAttribute('tabindex', '0');
         
-        card.addEventListener('click', (e) => {
-            createRipple(e, card);
-            selectToplaner(toplaner.name);
-        });
-
+        card.innerHTML = `
+            <div class="relative w-12 h-12 mb-2 rounded-lg overflow-hidden border border-white/20 group-hover:scale-105 transition-transform shadow-sm">
+                <img src="${toplaner.icon}" alt="${toplaner.name}" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            <span class="text-xs font-medium text-slate-300 group-hover:text-white truncate w-full text-center">${toplaner.name}</span>
+        `;
+        
+        const handleSelect = () => selectToplaner(toplaner.name);
+        
+        card.addEventListener('click', handleSelect);
         card.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                selectToplaner(toplaner.name);
+                handleSelect();
             }
         });
 
@@ -55,284 +51,132 @@ function renderToplanerGrid() {
     });
 }
 
-// Setup Event Listeners
 function setupEventListeners() {
-    // Search functionality with simple debounce
+    // Search with simple debounce
     let timeout = null;
     toplanerSearch.addEventListener('input', (e) => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            const searchTerm = e.target.value.toLowerCase();
-            filterToplanerGrid(searchTerm);
-        }, 50);
-    });
-    
-    // Focus effects for search
-    toplanerSearch.addEventListener('focus', () => {
-        toplanerSearch.parentElement.style.transform = 'scale(1.01)';
-        toplanerSearch.parentElement.style.transition = 'transform 0.2s ease';
-    });
-    
-    toplanerSearch.addEventListener('blur', () => {
-        toplanerSearch.parentElement.style.transform = 'scale(1)';
-    });
-    
-    // Sources modal controls
-    if(sourcesBtn) sourcesBtn.addEventListener('click', openSourcesModal);
-    if(modalClose) modalClose.addEventListener('click', closeSourcesModal);
-    
-    // Changelog modal controls
-    if(changelogBtn) changelogBtn.addEventListener('click', openChangelogModal);
-    if(changelogModalClose) changelogModalClose.addEventListener('click', closeChangelogModal);
-    
-    // Close modals when clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === sourcesModal) closeSourcesModal();
-        if (e.target === changelogModal) closeChangelogModal();
-    });
-    
-    // Close modals with Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            if (sourcesModal && sourcesModal.classList.contains('active')) closeSourcesModal();
-            if (changelogModal && changelogModal.classList.contains('active')) closeChangelogModal();
-        }
+            const term = e.target.value.toLowerCase();
+            const cards = toplanerGrid.children;
+            
+            Array.from(cards).forEach(card => {
+                const name = card.dataset.name;
+                if (name.includes(term)) {
+                    card.classList.remove('hidden');
+                    card.classList.add('flex');
+                } else {
+                    card.classList.add('hidden');
+                    card.classList.remove('flex');
+                }
+            });
+        }, 50); 
     });
 }
 
-// Filter Toplaner Grid based on search
-function filterToplanerGrid(searchTerm) {
-    const cards = toplanerGrid.querySelectorAll('.champion-card');
+function selectToplaner(name) {
+    if (currentSelectedToplaner === name) return;
+    currentSelectedToplaner = name;
     
-    cards.forEach(card => {
-        const name = card.dataset.name;
-        if (name.includes(searchTerm)) {
-            card.classList.remove('hidden');
-        } else {
-            card.classList.add('hidden');
-        }
-    });
-}
-
-// Create Ripple Effect
-function createRipple(event, element) {
-    const circle = document.createElement("span");
-    const diameter = Math.max(element.clientWidth, element.clientHeight);
-    const radius = diameter / 2;
-
-    const rect = element.getBoundingClientRect();
+    // Update Selection Text
+    selectedToplanerSpan.textContent = name;
     
-    circle.style.width = circle.style.height = `${diameter}px`;
-    circle.style.left = `${event.clientX - rect.left - radius}px`;
-    circle.style.top = `${event.clientY - rect.top - radius}px`;
-    circle.style.position = 'absolute';
-    circle.style.borderRadius = '50%';
-    circle.style.transform = 'scale(0)';
-    circle.style.animation = 'ripple 0.6s linear';
-    circle.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-    circle.style.pointerEvents = 'none';
-
-    // Add CSS for ripple if not exists
-    if (!document.getElementById('ripple-style')) {
-        const style = document.createElement('style');
-        style.id = 'ripple-style';
-        style.textContent = `
-            @keyframes ripple {
-                to { transform: scale(4); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
+    // Update Strategy Text
+    const strategy = toplaneData.counterStrategies[name];
+    if (strategy) {
+        strategyText.innerHTML = strategy;
+    } else {
+        strategyText.innerHTML = "No specific strategy data available yet. Focus on fundamentals, tracking the enemy jungler, and managing your wave properly.";
     }
 
-    const existingRipple = element.querySelector('.ripple');
-    if (existingRipple) existingRipple.remove();
-
-    circle.classList.add('ripple');
-    element.appendChild(circle);
-}
-
-// Show Loading State
-function showLoading() {
-    tierContainer.innerHTML = `
-        <div style="text-align: center; padding: 4rem;">
-            <div style="display: inline-block; width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: var(--accent-primary); animation: spin 1s ease-in-out infinite;"></div>
-            <p style="color: var(--text-secondary); margin-top: 1rem; font-size: 0.9rem;">Analyzing matchups...</p>
-        </div>
-    `;
+    // Show Results Section
+    resultsSection.classList.remove('hidden');
     
-    // Add spin animation if needed
-    if (!document.getElementById('spin-style')) {
-        const style = document.createElement('style');
-        style.id = 'spin-style';
-        style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
-        document.head.appendChild(style);
-    }
-}
-
-// Select an Enemy Toplaner
-function selectToplaner(toplanerName) {
-    if (currentSelectedToplaner === toplanerName) return;
-    
-    currentSelectedToplaner = toplanerName;
-    selectedToplanerSpan.textContent = toplanerName;
-    
-    // Update counter strategy recommendation
-    const strategyText = document.getElementById('strategyText');
-    const recommendation = toplaneData.counterStrategies[toplanerName];
-    
-    // Show results section
-    resultsSection.style.display = 'block';
-    
-    // Show loading animation
-    showLoading();
-    
-    // Scroll to results smoothly
+    // Scroll to results
     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // Simulate short delay for UX
-    setTimeout(() => {
-        if (recommendation) {
-            strategyText.innerHTML = recommendation;
-        } else {
-            strategyText.innerHTML = "No specific strategy data available for this champion. Focus on punishing their key cooldowns.";
-        }
-        renderCounterRecommendations(toplanerName);
-    }, 400);
+    // Render Counter Data
+    renderCounterRecommendations(name);
 }
 
-// Render Counter Recommendations by Tier
-function renderCounterRecommendations(toplanerName) {
+function renderCounterRecommendations(name) {
     tierContainer.innerHTML = '';
-    
-    const counters = toplaneData.counters[toplanerName];
-    
-    if (!counters || Object.keys(counters).every(tier => counters[tier].length === 0)) {
+    const counters = toplaneData.counters[name];
+
+    // Handle case with no data
+    if (!counters || Object.keys(counters).every(key => counters[key].length === 0)) {
         tierContainer.innerHTML = `
-            <div class="tier-section">
-                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">
-                    No counter data available for ${toplanerName} yet. Check back soon!
-                </p>
+            <div class="text-center p-8 border border-dashed border-slate-700 rounded-2xl bg-white/5">
+                <p class="text-slate-400">No specific counter data available for ${name} yet.</p>
             </div>
         `;
         return;
     }
-    
-    // Tier configuration
+
+    // Tier Configurations (Tailwind Styles)
     const tiers = [
-        { key: 'tierS', name: 'S Tier', description: 'Best possible counters - Hard counters', class: 'tier-s' },
-        { key: 'tierA', name: 'A Tier', description: 'Excellent counters - Strong matchup', class: 'tier-a' },
-        { key: 'tierB', name: 'B Tier', description: 'Good counters - Favorable skill matchup', class: 'tier-b' },
-        { key: 'tierC', name: 'C Tier', description: 'Mediocre - Even skill matchup', class: 'tier-c' },
-        { key: 'tierD', name: 'D Tier', description: 'Avoid if possible - Bad matchup', class: 'tier-d' }
+        { key: 'tierS', label: 'S Tier', desc: 'Hard Counters', bg: 'bg-gradient-to-r from-pink-500/10 to-rose-500/10', border: 'border-pink-500/30', badge: 'bg-pink-500' },
+        { key: 'tierA', label: 'A Tier', desc: 'Strong Picks', bg: 'bg-gradient-to-r from-purple-500/10 to-indigo-500/10', border: 'border-purple-500/30', badge: 'bg-purple-500' },
+        { key: 'tierB', label: 'B Tier', desc: 'Good Matchups', bg: 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10', border: 'border-blue-500/30', badge: 'bg-blue-500' },
+        { key: 'tierC', label: 'C Tier', desc: 'Skill Matchups', bg: 'bg-gradient-to-r from-emerald-500/10 to-teal-500/10', border: 'border-emerald-500/30', badge: 'bg-emerald-500' },
+        { key: 'tierD', label: 'D Tier', desc: 'Risky Picks', bg: 'bg-gradient-to-r from-amber-500/10 to-orange-500/10', border: 'border-amber-500/30', badge: 'bg-amber-500' },
     ];
-    
-    // Render each tier
+
     tiers.forEach(tier => {
-        const counterChamps = counters[tier.key];
-        
-        if (counterChamps && counterChamps.length > 0) {
-            const tierSection = createTierSection(tier, counterChamps);
-            tierContainer.appendChild(tierSection);
+        const champList = counters[tier.key];
+        if (champList && champList.length > 0) {
+            const section = document.createElement('div');
+            // Tier Section Container
+            section.className = `rounded-2xl overflow-hidden border ${tier.border} ${tier.bg} mb-6 shadow-md`;
+            
+            section.innerHTML = `
+                <div class="px-6 py-4 border-b border-white/5 flex items-center gap-3 backdrop-blur-sm">
+                    <span class="${tier.badge} text-white text-xs font-black px-3 py-1 rounded-md shadow-sm tracking-wide">${tier.label}</span>
+                    <span class="text-slate-300 text-sm font-medium tracking-wide">${tier.desc}</span>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${champList.map(counter => createCounterHTML(counter)).join('')}
+                </div>
+            `;
+            tierContainer.appendChild(section);
         }
     });
     
-    // Fade in effect
-    tierContainer.style.opacity = '0';
-    requestAnimationFrame(() => {
-        tierContainer.style.transition = 'opacity 0.4s ease';
-        tierContainer.style.opacity = '1';
+    // Add fade-in animation
+    tierContainer.animate([
+        { opacity: 0, transform: 'translateY(10px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+    ], {
+        duration: 400,
+        easing: 'ease-out'
     });
 }
 
-// Create a tier section with counters
-function createTierSection(tier, counterChamps) {
-    const section = document.createElement('div');
-    section.className = `tier-section ${tier.class}`;
-    
-    // Tier header
-    const header = document.createElement('div');
-    header.className = 'tier-header';
-    header.innerHTML = `
-        <div class="tier-badge">${tier.name}</div>
-        <div class="tier-description">${tier.description}</div>
-    `;
-    section.appendChild(header);
-    
-    // Counters grid
-    const grid = document.createElement('div');
-    // We re-use the 'supports-grid' class to keep the same style
-    grid.className = 'supports-grid'; 
-    
-    counterChamps.forEach(counter => {
-        const card = createCounterCard(counter);
-        grid.appendChild(card);
-    });
-    
-    section.appendChild(grid);
-    return section;
-}
-
-// Create a counter champion card
-function createCounterCard(counter) {
-    const card = document.createElement('div');
-    card.className = 'support-card'; // Re-using class for style
-    
-    // Support header
-    const header = document.createElement('div');
-    header.className = 'support-header';
-    header.innerHTML = `
-        <div class="support-icon"><img src="${counter.icon}" alt="${counter.name}"></div>
-        <div class="support-info">
-            <h3>${counter.name}</h3>
-            <div class="support-role">${counter.role}</div>
+function createCounterHTML(counter) {
+    return `
+        <div class="flex gap-4 p-4 bg-dark-900/60 rounded-xl border border-white/5 hover:border-white/20 transition-all hover:-translate-y-1">
+            <div class="flex-shrink-0">
+                <img src="${counter.icon}" alt="${counter.name}" class="w-14 h-14 rounded-xl border border-white/10 shadow-lg object-cover">
+            </div>
+            <div class="flex-grow">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-bold text-white text-lg">${counter.name}</h4>
+                    <span class="text-[10px] uppercase font-bold text-slate-400 bg-white/10 px-2 py-1 rounded border border-white/5">${counter.role}</span>
+                </div>
+                <ul class="text-sm text-slate-400 space-y-1.5">
+                    ${counter.reasons.map(r => `
+                        <li class="flex items-start gap-2 leading-snug">
+                            <span class="text-brand-400 mt-1 flex-shrink-0 text-xs">●</span>
+                            <span>${r}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
         </div>
     `;
-    card.appendChild(header);
-    
-    // Synergy reasons
-    const reasonsList = document.createElement('ul');
-    reasonsList.className = 'synergy-reasons';
-    
-    counter.reasons.forEach(reason => {
-        const li = document.createElement('li');
-        li.innerHTML = reason;
-        reasonsList.appendChild(li);
-    });
-    
-    card.appendChild(reasonsList);
-    return card;
 }
 
-// Modal functions
-function openSourcesModal() {
-    if(sourcesModal) {
-        sourcesModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeSourcesModal() {
-    if(sourcesModal) {
-        sourcesModal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
-
-function openChangelogModal() {
-    if(changelogModal) {
-        changelogModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeChangelogModal() {
-    if(changelogModal) {
-        changelogModal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
-
-// Initialize when DOM is ready
+// Initialize when DOM is loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
