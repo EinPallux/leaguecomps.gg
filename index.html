@@ -3,190 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeagueComps.gg - Ultimate Matchup Tool</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="style.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'rajdhani': ['Rajdhani', 'sans-serif'],
-                        'roboto': ['Roboto', 'sans-serif'],
-                    },
-                    colors: {
-                        'lol-gold': '#C8AA6E',
-                        'lol-blue': '#0AC8B9',
-                        'lol-dark': '#010A13',
-                        'lol-dark-2': '#091428',
-                        'lol-hextech': '#CDFAFA',
-                    }
-                }
-            }
+    <title>LeagueComps - AIO Lane Tool</title>
+    <link rel="icon" type="image/png" href="https://wiki.leagueoflegends.com/en-us/images/Every.png?9d53e">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Specific override for the header icon size in the Hub */
+        .header-icon {
+            height: 3rem;
+            width: 3rem;
+            vertical-align: middle;
+            margin-right: 0.75rem;
         }
-    </script>
+    </style>
 </head>
-<body class="bg-lol-dark text-slate-100 font-roboto overflow-hidden h-screen w-screen">
+<body>
+    <nav class="main-nav">
+        <ul>
+            <li class="active-link"><a href="./index.html"><img src="https://wiki.leagueoflegends.com/en-us/images/Specialist_icon.png?a3530" class="nav-icon-img" alt="Hub Icon"> Hub</a></li>
+            <li id="nav-toplane"><a href="./toplane/index.html"><img src="https://wiki.leagueoflegends.com/en-us/images/Top_icon.png?58442" class="nav-icon-img" alt="Top Lane Icon"> Toplane</a></li>
+            <li id="nav-midlane"><a href="./midlane/index.html"><img src="https://wiki.leagueoflegends.com/en-us/images/Middle_icon.png?fa3f0" class="nav-icon-img" alt="Mid Lane Icon"> Midlane</a></li>
+            <li id="nav-support"><a href="./support/index.html"><img src="https://wiki.leagueoflegends.com/en-us/images/Support_icon.png?af1ff" class="nav-icon-img" alt="Support Lane Icon"> Support</a></li>
+            <li class="coming-soon"><a href="#"><img src="https://wiki.leagueoflegends.com/en-us/images/Jungle_icon.png?9225d" class="nav-icon-img" alt="Jungle Lane Icon"> Jungle <span class="soon-badge">Soon</span></a></li>
+            <li class="coming-soon"><a href="#"><img src="https://wiki.leagueoflegends.com/en-us/images/Bottom_icon.png?6d4b2" class="nav-icon-img" alt="Bot Lane Icon"> Botlane <span class="soon-badge">Soon</span></a></li>
+        </ul>
+    </nav>
 
-    <!-- Background Image with Overlay -->
-    <div class="fixed inset-0 z-0 pointer-events-none">
-        <img src="images/hub_hero_bg.jpg" alt="Background" class="w-full h-full object-cover opacity-30">
-        <div class="absolute inset-0 bg-gradient-to-t from-lol-dark via-lol-dark/90 to-lol-dark/40"></div>
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMTAsIDIwMCwgMTg1LCAwLjEpIi8+PC9zdmc+')] opacity-20"></div>
-    </div>
-
-    <!-- Main Layout Container -->
-    <div class="relative z-10 flex h-screen w-full">
-        <!-- Sidebar Navigation -->
-        <aside class="w-20 lg:w-72 bg-lol-dark-2/90 backdrop-blur-md border-r border-slate-800 flex flex-col items-center lg:items-start py-6 transition-all duration-300 shadow-2xl z-50">
-            <!-- Logo Area -->
-            <div class="px-0 lg:px-6 mb-12 flex justify-center lg:justify-start w-full">
-                <img src="images/side_top_logo.svg" alt="LeagueComps" class="h-10 lg:h-12 w-auto drop-shadow-[0_0_10px_rgba(200,170,110,0.5)]">
-            </div>
-
-            <!-- Nav Links -->
-            <nav class="flex-1 w-full flex flex-col gap-2 px-2 lg:px-4">
-                <button class="nav-btn group active flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-slate-800/50 border border-transparent hover:border-lol-gold/30 w-full" data-target="matchup-section">
-                    <div class="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-lg border border-slate-700 group-hover:border-lol-gold group-hover:shadow-[0_0_15px_rgba(200,170,110,0.3)] transition-all">
-                        <img src="images/matchup_tool_tab.svg" alt="Matchups" class="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div class="hidden lg:flex flex-col items-start">
-                        <span class="font-rajdhani font-bold text-lg tracking-wide text-slate-200 group-hover:text-lol-gold uppercase">Matchup Tool</span>
-                        <span class="text-xs text-slate-500">Find your counters</span>
-                    </div>
-                </button>
-                
-                <button class="nav-btn group flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-slate-800/50 border border-transparent hover:border-lol-blue/30 w-full" data-target="runes-section">
-                    <div class="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-lg border border-slate-700 group-hover:border-lol-blue group-hover:shadow-[0_0_15px_rgba(10,200,185,0.3)] transition-all">
-                        <img src="images/rune_build_tab.svg" alt="Runes" class="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div class="hidden lg:flex flex-col items-start">
-                        <span class="font-rajdhani font-bold text-lg tracking-wide text-slate-200 group-hover:text-lol-blue uppercase">Rune Forge</span>
-                        <span class="text-xs text-slate-500">Optimize your build</span>
-                    </div>
-                </button>
-
-                <button class="nav-btn group flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-slate-800/50 border border-transparent hover:border-purple-400/30 w-full" data-target="meta-section">
-                    <div class="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-lg border border-slate-700 group-hover:border-purple-400 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all">
-                        <img src="images/meta_information_tab.svg" alt="Meta" class="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div class="hidden lg:flex flex-col items-start">
-                        <span class="font-rajdhani font-bold text-lg tracking-wide text-slate-200 group-hover:text-purple-400 uppercase">Meta & Patch</span>
-                        <span class="text-xs text-slate-500">Tier lists & nerfs</span>
-                    </div>
-                </button>
-            </nav>
-            
-            <!-- Footer -->
-            <div class="mt-auto px-6 hidden lg:block">
-                <div class="text-xs text-slate-600 font-rajdhani border-t border-slate-800 pt-4">
-                    v25.23 <br> Data updated: Patch 25.23
+    <div class="container">
+        <header>
+            <div class="patch-badge">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                <div class="patch-info">
+                    <span class="patch-label">Data Based On<br></span>
+                    <span class="patch-version">Patch 25.24 / Season 15</span>
                 </div>
             </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 h-full overflow-hidden relative z-10">
-            <div class="h-full overflow-y-auto custom-scrollbar p-4 lg:p-10 pb-24">
-                
-                <!-- Feature 1: Matchup Tool -->
-                <section id="matchup-section" class="content-section block animate-fade-in min-h-full">
-                    <header class="mb-8 border-b border-slate-800 pb-6">
-                        <h1 class="text-4xl lg:text-6xl font-rajdhani font-bold text-transparent bg-clip-text bg-gradient-to-r from-lol-gold to-amber-200 uppercase drop-shadow-sm">Lane Matchups</h1>
-                        <p class="text-slate-400 mt-2 text-lg font-light">Select your lane role and the enemy champion to analyze counter strategies.</p>
-                    </header>
-
-                    <div class="mb-10">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="w-1 h-8 bg-lol-gold"></div>
-                            <h3 class="text-xl font-bold text-lol-gold uppercase tracking-wider">1. Choose Your Lane</h3>
-                        </div>
-                        <div class="flex gap-3 flex-wrap" id="lane-selector"></div>
-                    </div>
-
-                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
-                        <div class="xl:col-span-5 bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-md shadow-xl h-fit">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-1 h-6 bg-lol-blue"></div>
-                                <h3 class="text-lg font-bold text-lol-blue uppercase tracking-wider">2. Select Enemy Champion</h3>
-                            </div>
-                            <div class="relative mb-4">
-                                <input type="text" id="champion-search" placeholder="Search champion..." class="w-full bg-slate-950 border border-slate-700 text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-lol-blue focus:ring-1 focus:ring-lol-blue transition-all font-rajdhani text-lg placeholder-slate-600">
-                                <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </div>
-                            <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-[450px] overflow-y-auto custom-scrollbar pr-2" id="champion-grid"></div>
-                        </div>
-
-                        <div class="xl:col-span-7">
-                            <div id="matchup-result" class="hidden h-full"></div>
-                            <div id="matchup-placeholder" class="h-full min-h-[400px] flex flex-col items-center justify-center text-slate-500 bg-slate-900/20 rounded-2xl border-2 border-dashed border-slate-800/50 animate-pulse">
-                                <div class="w-20 h-20 rounded-full bg-slate-800/50 flex items-center justify-center mb-4">
-                                    <img src="images/lol_logo.png" class="w-12 opacity-20 grayscale" alt="Logo">
-                                </div>
-                                <span class="text-2xl font-rajdhani font-bold text-slate-600">Awaiting Input</span>
-                                <span class="text-sm mt-2">Select a lane and champion to begin analysis</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Feature 2: Rune Builds -->
-                <section id="runes-section" class="content-section hidden animate-fade-in min-h-full">
-                    <header class="mb-8 border-b border-slate-800 pb-6">
-                        <h1 class="text-4xl lg:text-6xl font-rajdhani font-bold text-transparent bg-clip-text bg-gradient-to-r from-lol-blue to-cyan-200 uppercase">Rune Forge</h1>
-                        <p class="text-slate-400 mt-2 text-lg">Curated rune paths used by Challenger players.</p>
-                    </header>
-                    <div class="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-6 lg:p-10 min-h-[600px] relative backdrop-blur-sm">
-                         <div class="max-w-xl mx-auto mb-12 relative z-10">
-                            <div class="relative group">
-                                <div class="absolute -inset-1 bg-gradient-to-r from-lol-blue to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                                <input type="text" id="rune-search" placeholder="Search champion for runes..." class="relative w-full bg-slate-900 border border-slate-600 text-white rounded-lg px-6 py-4 focus:outline-none focus:border-lol-blue focus:ring-1 focus:ring-lol-blue transition-all font-rajdhani text-xl text-center placeholder-slate-600">
-                            </div>
-                         </div>
-                         <div id="rune-display-area" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
-                    </div>
-                </section>
-
-                <!-- Feature 3: Meta & Patch -->
-                <section id="meta-section" class="content-section hidden animate-fade-in min-h-full">
-                    <div class="grid grid-cols-1 2xl:grid-cols-2 gap-8 h-full">
-                        <div class="flex flex-col h-full bg-slate-900/40 p-6 rounded-2xl border border-slate-700/30 backdrop-blur-sm">
-                            <header class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                <div>
-                                    <h1 class="text-3xl font-rajdhani font-bold text-white uppercase flex items-center gap-2">
-                                        <span class="text-purple-400">S+</span> Meta Tier List
-                                    </h1>
-                                    <p class="text-sm text-slate-400">Highest winrate champions by lane</p>
-                                </div>
-                                <div class="flex bg-slate-950 rounded-lg p-1 border border-slate-800" id="meta-lane-filters"></div>
-                            </header>
-                            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2" id="meta-list"></div>
-                        </div>
-
-                        <div class="flex flex-col h-full bg-slate-900/40 p-6 rounded-2xl border border-slate-700/30 backdrop-blur-sm">
-                             <header class="mb-6">
-                                <h1 class="text-3xl font-rajdhani font-bold text-white uppercase flex items-center gap-3">
-                                    <span class="w-1.5 h-8 bg-red-500 block shadow-[0_0_10px_red]"></span>
-                                    Latest Patch Notes
-                                </h1>
-                                <p class="text-sm text-slate-400 ml-4 mt-1">Official changes & balance updates</p>
-                            </header>
-                            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-4" id="patch-notes"></div>
-                        </div>
-                    </div>
-                </section>
-
+            <div class="header-content">
+                <h1><img src="https://wiki.leagueoflegends.com/en-us/images/Every.png?9d53e" alt="League Comps Icon" class="header-icon"> League Comps</h1>
+                <p class="subtitle">Your suite of lane companion tools</p>
             </div>
+            <div class="header-buttons">
+                <button class="sources-btn" id="sourcesBtn" aria-label="View Sources">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4M12 8h.01"/>
+                    </svg>
+                    Sources
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content-column">
+
+            <section class="selection-section">
+                <div class="selection-header">
+                    <h2>Select Your Lane/Situation</h2>
+                    <p>Choose which lane companion you need</p>
+                </div>
+                
+                <div class="champion-grid" id="toolGrid">
+                    
+                    <a href="./support/index.html" class="champion-grid-link">
+                        <div class="champion-card">
+                            <div class="champion-icon">
+                                <img src="https://wiki.leagueoflegends.com/en-us/images/Support_icon.png?af1ff" alt="Support Icon">
+                            </div>
+                            <div class="champion-name">Support Companion</div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; line-height: 1.4;">Find out which Support you should play, based on your ADC's pick</p>
+                        </div>
+                    </a>
+
+                    <a href="./midlane/index.html" class="champion-grid-link">
+                        <div class="champion-card">
+                            <div class="champion-icon">
+                                <img src="https://wiki.leagueoflegends.com/en-us/images/Middle_icon.png?fa3f0" alt="Midlane Icon">
+                            </div>
+                            <div class="champion-name">Midlane Counter</div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; line-height: 1.4;">Find the best counter for your opponent</p>
+                        </div>
+                    </a>
+
+                    <a href="./toplane/index.html" class="champion-grid-link">
+                        <div class="champion-card">
+                            <div class="champion-icon">
+                                <img src="https://wiki.leagueoflegends.com/en-us/images/Top_icon.png?58442" alt="Toplane Icon">
+                            </div>
+                            <div class="champion-name">Toplane Counter</div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; line-height: 1.4;">Find the best counter for your opponent</p>
+                        </div>
+                    </a>
+
+                    <a href="#" class="champion-grid-link coming-soon-card" onclick="return false;">
+                        <div class="champion-card">
+                            <div class="champion-icon">
+                                <img src="https://wiki.leagueoflegends.com/en-us/images/Jungle_icon.png?9225d" alt="Jungle Icon">
+                            </div>
+                            <div class="champion-name">Jungle Counter</div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; line-height: 1.4;">Counter your enemy jungler</p>
+                            <span class="coming-soon-badge">In Development</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="champion-grid-link coming-soon-card" onclick="return false;">
+                        <div class="champion-card">
+                            <div class="champion-icon">
+                                <img src="https://wiki.leagueoflegends.com/en-us/images/Bottom_icon.png?6d4b2" alt="Botlane Icon">
+                            </div>
+                            <div class="champion-name">Botlane Counter</div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; line-height: 1.4;">Find the best 2v2 botlane counters</p>
+                            <span class="coming-soon-badge">In Development</span>
+                        </div>
+                    </a>
+
+                </div>
+            </section>
+
+            <section class="patch-notes-section"> 
+                <div class="patch-notes-header"> 
+                    <h2>🏆 Top Champions (Patch 25.24)</h2>
+                </div>
+                <div class="meta-champions-grid">
+                    
+                    <div class="patch-column">
+                        <h3><img src="https://wiki.leagueoflegends.com/en-us/images/Top_icon.png?58442" alt="Top Lane Icon"> Toplane</h3>
+                        <ul class="patch-list">
+                            <li class="patch-item">
+                                <strong><img src="icons/Malphite.png" alt="Malphite" class="patch-champ-icon">Malphite <strong class="tier-s-plus" style="margin-left: auto;">(S+)</strong></strong>
+                                <span class="meta-stats">WR: 51.84% / PR: 7.9% / BR: 14.5%</span>
+                                <span class="meta-tier"><br>(602,110+ Matches)</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/K'Sante.png" alt="K'Sante" class="patch-champ-icon">K'Sante <strong class="tier-s" style="margin-left: auto;">(S)</strong></strong>
+                                <span class="meta-stats">WR: 50.92% / PR: 6.8% / BR: 5.4%</span>
+                                <span class="meta-tier"><br>(398,542+ Matches)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="patch-column">
+                        <h3><img src="https://wiki.leagueoflegends.com/en-us/images/Jungle_icon.png?9225d" alt="Jungle Lane Icon"> Jungle</h3>
+                        <ul class="patch-list">
+                            <li class="patch-item">
+                                <strong><img src="icons/Lee Sin.png" alt="Lee Sin" class="patch-champ-icon">Lee Sin <strong class="tier-s" style="margin-left: auto;">(S)</strong></strong>
+                                <span class="meta-stats">WR: 50.45% / PR: 12.3% / BR: 8.9%</span>
+                                <span class="meta-tier"><br>(712,445+ Matches)</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Viego.png" alt="Viego" class="patch-champ-icon">Viego <strong class="tier-s" style="margin-left: auto;">(S)</strong></strong>
+                                <span class="meta-stats">WR: 51.12% / PR: 9.5% / BR: 6.1%</span>
+                                <span class="meta-tier"><br>(489,201+ Matches)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="patch-column">
+                        <h3><img src="https://wiki.leagueoflegends.com/en-us/images/Middle_icon.png?fa3f0" alt="Mid Lane Icon"> Midlane</h3>
+                        <ul class="patch-list">
+                            <li class="patch-item">
+                                <strong><img src="icons/Syndra.png" alt="Syndra" class="patch-champ-icon">Syndra <strong class="tier-s-plus" style="margin-left: auto;">(S+)</strong></strong>
+                                <span class="meta-stats">WR: 52.01% / PR: 8.4% / BR: 12.6%</span>
+                                <span class="meta-tier"><br>(410,223+ Matches)</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Yone.png" alt="Yone" class="patch-champ-icon">Yone <strong class="tier-s" style="margin-left: auto;">(S)</strong></strong>
+                                <span class="meta-stats">WR: 50.88% / PR: 10.5% / BR: 18.3%</span>
+                                <span class="meta-tier"><br>(556,112+ Matches)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="patch-column">
+                        <h3><img src="https://wiki.leagueoflegends.com/en-us/images/Bottom_icon.png?6d4b2" alt="Bot Lane Icon"> ADC</h3>
+                        <ul class="patch-list">
+                            <li class="patch-item">
+                                <strong><img src="icons/Ashe.png" alt="Ashe" class="patch-champ-icon">Ashe <strong class="tier-s-plus" style="margin-left: auto;">(S+)</strong></strong>
+                                <span class="meta-stats">WR: 51.55% / PR: 15.8% / BR: 12.4%</span>
+                                <span class="meta-tier"><br>(982,104+ Matches)</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Kai'Sa.png" alt="Kai'Sa" class="patch-champ-icon">Kai'Sa <strong class="tier-s" style="margin-left: auto;">(S)</strong></strong>
+                                <span class="meta-stats">WR: 50.75% / PR: 22.1% / BR: 8.7%</span>
+                                <span class="meta-tier"><br>(1,205,331+ Matches)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="patch-column">
+                        <h3><img src="https://wiki.leagueoflegends.com/en-us/images/Support_icon.png?af1ff" alt="Support Lane Icon"> Support</h3>
+                        <ul class="patch-list">
+                            <li class="patch-item">
+                                <strong><img src="icons/Thresh.png" alt="Thresh" class="patch-champ-icon">Thresh <strong class="tier-s-plus" style="margin-left: auto;">(S+)</strong></strong>
+                                <span class="meta-stats">WR: 51.34% / PR: 14.2% / BR: 9.5%</span>
+                                <span class="meta-tier"><br>(654,129+ Matches)</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Lulu.png" alt="Lulu" class="patch-champ-icon">Lulu <strong class="tier-s" style="margin-left: auto;">(S)</strong></strong>
+                                <span class="meta-stats">WR: 51.92% / PR: 10.8% / BR: 7.2%</span>
+                                <span class="meta-tier"><br>(312,558+ Matches)</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>Important Information:</strong> These statistics were compiled based on 12 different sources, including OP.gg, U.gg, Mobalytics, MetaSrc, Mobafire, Blitz.gg, Porofessor, and more. These sources were all compared with each other, and the most accurate data possible was calculated from them. It's based on Iron until Grandmaster matches. <br>
+                    <strong>What does this Data mean?:</strong> These Champions perform overwhelmingly good in all matchups (even those who normally counter the champion), making them great OTP or general picks.
+                </div>
+            </section>
+            
+            <section class="patch-notes-section">
+                <div class="patch-notes-header">
+                    <h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -3px; margin-right: 8px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Latest Patch 25.24 Changes</h2>
+                </div>
+                <div class="patch-notes-grid">
+                    
+                    <div class="patch-column buffs">
+                        <h3><span class="patch-icon">▲</span> BUFFS</h3>
+                        <ul class="patch-list">
+                            <li class="patch-item">
+                                <strong><img src="icons/Braum.png" alt="Braum" class="patch-champ-icon">Braum</strong>
+                                <span>Base HP increased & Passive damage buffed.</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Nasus.png" alt="Nasus" class="patch-champ-icon">Nasus</strong>
+                                <span>Base HP increased & Q base damage buffed.</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Sejuani.png" alt="Sejuani" class="patch-champ-icon">Sejuani</strong>
+                                <span>Q & R cooldowns reduced, AP ratios increased.</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Swain.png" alt="Swain" class="patch-champ-icon">Swain</strong>
+                                <span>Passive healing increased to 6%.</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Viktor.png" alt="Viktor" class="patch-champ-icon">Viktor</strong>
+                                <span>Q shield strength and AP ratio increased.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="patch-column nerfs">
+                        <h3><span class="patch-icon">▼</span> NERFS</h3>
+                        <ul class="patch-list">
+                            <li class="patch-item">
+                                <strong><img src="icons/Dr. Mundo.png" alt="Dr. Mundo" class="patch-champ-icon">Dr. Mundo</strong>
+                                <span>Q monster damage cap reduced (Jungle nerf).</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Kayn.png" alt="Kayn" class="patch-champ-icon">Kayn (Shadow)</strong>
+                                <span>Passive magic damage reduced.</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Kha'Zix.png" alt="Kha'Zix" class="patch-champ-icon">Kha'Zix</strong>
+                                <span>W base damage reduced.</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Master Yi.png" alt="Master Yi" class="patch-champ-icon">Master Yi</strong>
+                                <span>Base Health & AD growth reduced.</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Mel.png" alt="Mel" class="patch-champ-icon">Mel</strong>
+                                <span>E damage, duration, and mana cost increased (nerfed).</span>
+                            </li>
+                             <li class="patch-item">
+                                <strong><img src="icons/Zed.png" alt="Zed" class="patch-champ-icon">Zed</strong>
+                                <span>Jungle clear speed reduced significantly.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="patch-column changes">
+                        <h3><span class="patch-icon">⇄</span> CHANGES</h3>
+                        <ul class="patch-list">
+                            <li class="patch-item">
+                                <strong><img src="icons/Zaahen.png" alt="Zaahen" class="patch-champ-icon">Zaahen</strong>
+                                <span>Overall stats/damage nerfs but Q jungle monster damage increased.</span>
+                            </li>
+                            <li class="patch-item">
+                                <strong><img src="icons/Nidalee.png" alt="Nidalee" class="patch-champ-icon">Nidalee</strong>
+                                <span>Q long-range damage bugfix (effectively a nerf).</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
         </main>
     </div>
+    
+    <div class="modal" id="sourcesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Data Sources & Credits</h2>
+                <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-intro">This site's champion data is based on professional guides and statistical analysis from various trusted League of Legends sources.</p>
+                <div class="source-list">
+                    <div class="source-item">
+                        <h3>u.gg / op.gg / Mobalytics</h3>
+                        <p>Statistical matchup data and counter-picks.</p>
+                    </div>
+                    <div class="source-item">
+                        <h3>Pro Player & High-Elo Guides</h3>
+                        <p>Guides and analysis on specific matchups and synergies.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Scripts - LOAD ORDER MATTERS -->
-    <!-- Note: data.js uses export, so main script must be type="module" -->
-    <script type="module" src="app.js"></script>
+    <script>
+        const sourcesBtn = document.getElementById('sourcesBtn');
+        const sourcesModal = document.getElementById('sourcesModal');
+        const modalClose = document.getElementById('modalClose');
+
+        sourcesBtn.addEventListener('click', () => sourcesModal.classList.add('active'));
+        modalClose.addEventListener('click', () => sourcesModal.classList.remove('active'));
+        
+        sourcesModal.addEventListener('click', (e) => {
+            if (e.target === sourcesModal) sourcesModal.classList.remove('active');
+        });
+    </script>
 </body>
 </html>

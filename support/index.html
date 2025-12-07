@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoL Support Companion - Pick the Perfect Support</title>
+    <link rel="icon" type="image/png" href="https://wiki.leagueoflegends.com/en-us/images/Every.png?9d53e">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="../index.html"><img src="https://wiki.leagueoflegends.com/en-us/images/Specialist_icon.png?a3530" class="nav-icon-img" alt="Hub Icon"> Hub</a></li>
+            <li id="nav-toplane"><a href="../toplane/index.html"><img src="https://wiki.leagueoflegends.com/en-us/images/Top_icon.png?58442" class="nav-icon-img" alt="Top Lane Icon"> Toplane</a></li>
+            <li id="nav-midlane"><a href="../midlane/index.html"><img src="https://wiki.leagueoflegends.com/en-us/images/Middle_icon.png?fa3f0" class="nav-icon-img" alt="Mid Lane Icon"> Midlane</a></li>
+            <li id="nav-support" class="active-link"><a href="./index.html"><img src="https://wiki.leagueoflegends.com/en-us/images/Support_icon.png?af1ff" class="nav-icon-img" alt="Support Lane Icon"> Support</a></li>
+            <li class="coming-soon"><a href="#"><img src="https://wiki.leagueoflegends.com/en-us/images/Jungle_icon.png?9225d" class="nav-icon-img" alt="Jungle Lane Icon"> Jungle <span class="soon-badge">Soon</span></a></li>
+            <li class="coming-soon"><a href="#"><img src="https://wiki.leagueoflegends.com/en-us/images/Bottom_icon.png?6d4b2" class="nav-icon-img" alt="Bot Lane Icon"> Botlane <span class="soon-badge">Soon</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="patch-badge">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                <div class="patch-info">
+                    <span class="patch-label">Data Based On</span>
+                    <span class="patch-version">Patch 25.24 / Season 15</span>
+                </div>
+            </div>
+            <div class="header-content">
+                <h1><img src="https://wiki.leagueoflegends.com/en-us/images/Support_icon.png?af1ff" alt="Support Icon" class="header-icon">Support Companion</h1>
+                <p class="subtitle">Find the perfect support for your ADC</p>
+            </div>
+            <div class="header-buttons">
+                <button class="changelog-btn" id="changelogBtn" aria-label="View Changelog">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Changelog
+                </button>
+                <button class="sources-btn" id="sourcesBtn" aria-label="View Sources">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4M12 8h.01"/>
+                    </svg>
+                    Sources
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content-column">
+            <section class="selection-section">
+                <div class="selection-header">
+                    <h2>Select Your ADC</h2>
+                    <p>Choose the champion your ADC picked</p>
+                </div>
+                
+                <div class="search-container">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="adcSearch" 
+                        class="search-input" 
+                        placeholder="Search for an ADC champion..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="champion-grid" id="adcGrid">
+                    </div>
+            </section>
+
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2>Recommended Supports for <span id="selectedAdc"></span></h2>
+                    <p class="results-subtext">Ranked from best to worst synergy</p>
+                    
+                    <div class="support-type-recommendation" id="supportTypeRecommendation">
+                        <div class="recommendation-icon">💡</div>
+                        <div class="recommendation-content">
+                            <h3>Best Support Types</h3>
+                            <p id="supportTypeText"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tier-container" id="tierContainer">
+                    </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal" id="sourcesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Data Sources & Credits</h2>
+                <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-intro">This tool's champion synergy data is based on professional guides and statistical analysis from the following trusted League of Legends sources:</p>
+                
+                <div class="source-list">
+                    <div class="source-item">
+                        <h3>Mobalytics</h3>
+                        <p>Professional tier lists and champion analysis for Season 14+</p>
+                    </div>
+                    
+                    <div class="source-item">
+                        <h3>MOBAFire</h3>
+                        <p>Community-driven champion guides and synergy tier lists</p>
+                    </div>
+                    
+                    <div class="source-item">
+                        <h3>Dignitas & GameLeap</h3>
+                        <p>Professional esports organization guides on bot lane synergies</p>
+                    </div>
+                </div>
+                
+                <div class="disclaimer">
+                    <strong>Note:</strong> Champion synergies are based on current meta analysis (Season 14/2024-2025). The meta evolves with each patch, so recommendations may vary.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="changelogModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📝 Changelog</h2>
+                <button class="modal-close" id="changelogModalClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-intro">Track all updates, improvements, and data changes to the LoL Support Companion tool.</p>
+                
+                <div class="changelog-list" id="changelogList">
+                    <div class="changelog-entry">
+                        <div class="changelog-version">
+                            <span class="version-badge">v1.4.0</span>
+                            <span class="version-date">December 07, 2025</span>
+                        </div>
+                        <div class="changelog-content">
+                            <h3>Data Update to Patch 25.24</h3>
+                            <ul>
+                                <li>Completely updated all Data to <strong>Patch 25.24</strong> from 02.12.2025.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="changelog-entry">
+                        <div class="changelog-version">
+                            <span class="version-badge">v1.3.0</span>
+                            <span class="version-date">November 12, 2025</span>
+                        </div>
+                        <div class="changelog-content">
+                            <h3>New Features Added</h3>
+                            <ul>
+                                <li>Added <strong>Patch Version Badge</strong> in header showing current patch data</li>
+                                <li>Added <strong>Support Type Recommendations</strong> box for each ADC</li>
+                                <li>Each champion now shows best support types (Enchanter, Engage, Control, etc.)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="changelog-entry">
+                        <div class="changelog-version">
+                            <span class="version-badge">v1.2.0</span>
+                            <span class="version-date">November 12, 2025</span>
+                        </div>
+                        <div class="changelog-content">
+                            <h3>New ADC Champion Added</h3>
+                            <ul>
+                                <li>Added <strong>Yunara</strong> - The newest traditional ADC with full support tier list</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="changelog-entry">
+                        <div class="changelog-version">
+                            <span class="version-badge">v1.1.0</span>
+                            <span class="version-date">November 12, 2025</span>
+                        </div>
+                        <div class="changelog-content">
+                            <h3>New ADC Champions Added</h3>
+                            <ul>
+                                <li>Added <strong>Ziggs</strong> with full support tier list and synergy analysis</li>
+                                <li>Added <strong>Seraphine</strong> (APC) with enchanter-focused synergies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
